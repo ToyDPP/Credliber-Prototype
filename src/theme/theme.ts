@@ -67,8 +67,7 @@ export const appTheme = createTheme({
         body: {
           height: '100%',
           minWidth: 320,
-          background:
-            'radial-gradient(circle at top left, rgba(255,255,255,0.98), rgba(243,247,250,1) 52%, rgba(238,244,249,1) 100%)',
+          backgroundColor: '#F3F7FA',
           color: textPrimary,
           WebkitFontSmoothing: 'antialiased',
           MozOsxFontSmoothing: 'grayscale',

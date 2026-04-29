@@ -1,12 +1,10 @@
-import type {
-  LoginPrototypeState,
-  PrototypeNavigationSection,
-} from '../types/prototype'
+import type { LoginPrototypeState } from '../types/prototype'
 
 export const loginStates: LoginPrototypeState[] = [
   {
-    id: 'empty',
+    id: 'login.empty',
     screenId: 'login',
+    stateKey: 'empty',
     label: 'Campos vazios',
     email: {
       value: '',
@@ -19,8 +17,9 @@ export const loginStates: LoginPrototypeState[] = [
     loading: false,
   },
   {
-    id: 'filled',
+    id: 'login.filled',
     screenId: 'login',
+    stateKey: 'filled',
     label: 'Campos preenchidos',
     email: {
       value: 'admin@credliber.com.br',
@@ -33,8 +32,9 @@ export const loginStates: LoginPrototypeState[] = [
     loading: false,
   },
   {
-    id: 'required',
+    id: 'login.required',
     screenId: 'login',
+    stateKey: 'required',
     label: 'Campos não preenchidos',
     email: {
       value: '',
@@ -50,8 +50,9 @@ export const loginStates: LoginPrototypeState[] = [
     loading: false,
   },
   {
-    id: 'invalid',
+    id: 'login.invalid',
     screenId: 'login',
+    stateKey: 'invalid',
     label: 'Campos preenchidos errados',
     email: {
       value: 'admin@credliber',
@@ -67,8 +68,9 @@ export const loginStates: LoginPrototypeState[] = [
     loading: false,
   },
   {
-    id: 'passwordVisible',
+    id: 'login.passwordVisible',
     screenId: 'login',
+    stateKey: 'passwordVisible',
     label: 'Senha visível',
     email: {
       value: 'admin@credliber.com.br',
@@ -81,8 +83,9 @@ export const loginStates: LoginPrototypeState[] = [
     loading: false,
   },
   {
-    id: 'rememberMe',
+    id: 'login.rememberMe',
     screenId: 'login',
+    stateKey: 'rememberMe',
     label: 'Manter conectado',
     email: {
       value: 'admin@credliber.com.br',
@@ -95,8 +98,9 @@ export const loginStates: LoginPrototypeState[] = [
     loading: false,
   },
   {
-    id: 'loading',
+    id: 'login.loading',
     screenId: 'login',
+    stateKey: 'loading',
     label: 'Carregando',
     email: {
       value: 'admin@credliber.com.br',
@@ -109,8 +113,9 @@ export const loginStates: LoginPrototypeState[] = [
     loading: true,
   },
   {
-    id: 'generalError',
+    id: 'login.generalError',
     screenId: 'login',
+    stateKey: 'generalError',
     label: 'Erro geral',
     email: {
       value: 'admin@credliber.com.br',
@@ -123,17 +128,5 @@ export const loginStates: LoginPrototypeState[] = [
     loading: false,
     generalError:
       'Não foi possível acessar sua conta. Verifique os dados e tente novamente.',
-  },
-]
-
-export const prototypeNavigation: PrototypeNavigationSection[] = [
-  {
-    id: 'login',
-    label: 'Login',
-    items: loginStates.map(({ id, label, screenId }) => ({
-      id,
-      label,
-      screenId,
-    })),
   },
 ]

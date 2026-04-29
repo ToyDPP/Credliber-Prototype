@@ -24,12 +24,14 @@ interface LoginFormProps {
   state: LoginPrototypeState
   onTogglePasswordVisibility: () => void
   onToggleRememberMe: () => void
+  onCreateAccount: () => void
 }
 
 export function LoginForm({
   state,
   onTogglePasswordVisibility,
   onToggleRememberMe,
+  onCreateAccount,
 }: LoginFormProps) {
   const passwordIcon = state.passwordVisible ? (
     <VisibilityRoundedIcon />
@@ -203,6 +205,7 @@ export function LoginForm({
           color="primary"
           fullWidth
           disabled={state.loading}
+          onClick={onCreateAccount}
         >
           Cadastre-se agora
         </Button>
