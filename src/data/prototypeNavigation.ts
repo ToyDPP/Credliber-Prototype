@@ -1,5 +1,16 @@
-import { emailConfirmedStates, registrationStepOneStates, registrationStepThreeStates, registrationStepTwoStates, registrationSuccessStates } from './registrationStates'
 import { loginStates } from './loginStates'
+import {
+  emailConfirmedStates,
+  registrationStepOneStates,
+  registrationStepThreeStates,
+  registrationStepTwoStates,
+  registrationSuccessStates,
+} from './registrationStates'
+import {
+  passwordRecoveryMessagesStates,
+  passwordRecoveryNewPasswordStates,
+  passwordRecoveryRequestStates,
+} from './passwordRecoveryStates'
 import type {
   PrototypeNavigationGroup,
   PrototypeScreenState,
@@ -13,6 +24,9 @@ export const prototypeStates: PrototypeScreenState[] = [
   ...registrationStepThreeStates,
   ...registrationSuccessStates,
   ...emailConfirmedStates,
+  ...passwordRecoveryRequestStates,
+  ...passwordRecoveryMessagesStates,
+  ...passwordRecoveryNewPasswordStates,
 ]
 
 export const prototypeStateMap = Object.fromEntries(
@@ -73,5 +87,36 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
       label,
       screenId,
     })),
+  },
+  {
+    id: 'passwordRecoveryRequest',
+    label: 'Login _ Recuperar Senha',
+    children: passwordRecoveryRequestStates.map(({ id, label, screenId }) => ({
+      id,
+      label,
+      screenId,
+    })),
+  },
+  {
+    id: 'passwordRecoveryMessages',
+    label: 'Login _ Recuperar Senha _ Verifique suas mensagens',
+    children: passwordRecoveryMessagesStates.map(
+      ({ id, label, screenId }) => ({
+        id,
+        label,
+        screenId,
+      }),
+    ),
+  },
+  {
+    id: 'passwordRecoveryNewPassword',
+    label: 'Login _ Recuperar Senha _ Criar nova senha',
+    children: passwordRecoveryNewPasswordStates.map(
+      ({ id, label, screenId }) => ({
+        id,
+        label,
+        screenId,
+      }),
+    ),
   },
 ]

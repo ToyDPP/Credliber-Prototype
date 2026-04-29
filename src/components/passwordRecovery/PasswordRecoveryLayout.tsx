@@ -1,31 +1,20 @@
-import { useState } from 'react'
 import { Box, useMediaQuery, useTheme } from '@mui/material'
-import { CredliberLogo } from './CredliberLogo'
-import { LoginForm } from './LoginForm'
-import type { LoginPrototypeState } from '../types/prototype'
+import type { ReactNode } from 'react'
+import { CredliberLogo } from '../CredliberLogo'
+import { DottedBackground } from '../DottedBackground'
 
-interface LoginScreenProps {
-  state: LoginPrototypeState
-  onCreateAccount: () => void
-  onForgotPassword: () => void
+interface PasswordRecoveryLayoutProps {
+  children: ReactNode
+  formMaxWidth?: number
 }
 
-export function LoginScreen({
-  state,
-  onCreateAccount,
-  onForgotPassword,
-}: LoginScreenProps) {
+export function PasswordRecoveryLayout({
+  children,
+  formMaxWidth = 430,
+}: PasswordRecoveryLayoutProps) {
   const theme = useTheme()
   const isTabletDown = useMediaQuery(theme.breakpoints.down('md'))
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const [passwordVisible, setPasswordVisible] = useState(state.passwordVisible)
-  const [rememberMe, setRememberMe] = useState(state.rememberMe)
-
-  const renderedState: LoginPrototypeState = {
-    ...state,
-    passwordVisible,
-    rememberMe,
-  }
 
   return (
     <Box
@@ -50,10 +39,17 @@ export function LoginScreen({
             xs: 'none',
             md: '1px solid rgba(184, 195, 211, 0.24)',
           },
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
+        <Box sx={{ display: { xs: 'none', md: 'block' }, position: 'absolute', inset: 0 }}>
+          <DottedBackground />
+        </Box>
         <Box
           sx={{
+            position: 'relative',
+            zIndex: 1,
             transform: isTabletDown ? 'none' : { md: 'scale(0.82)', lg: 'scale(1)' },
             transformOrigin: 'center',
           }}
@@ -77,24 +73,10 @@ export function LoginScreen({
         <Box
           sx={{
             width: '100%',
-            maxWidth: isMobile ? 400 : 430,
+            maxWidth: isMobile ? Math.min(formMaxWidth, 400) : formMaxWidth,
           }}
         >
-          <LoginForm
-            state={renderedState}
-            onTogglePasswordVisibility={() => {
-              if (!state.loading) {
-                setPasswordVisible((current) => !current)
-              }
-            }}
-            onToggleRememberMe={() => {
-              if (!state.loading) {
-                setRememberMe((current) => !current)
-              }
-            }}
-            onCreateAccount={onCreateAccount}
-            onForgotPassword={onForgotPassword}
-          />
+          {children}
         </Box>
       </Box>
     </Box>

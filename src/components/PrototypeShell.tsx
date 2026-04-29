@@ -11,8 +11,12 @@ import MenuRoundedIcon from '@mui/icons-material/MenuRounded'
 import { prototypeNavigation, prototypeStateMap } from '../data/prototypeNavigation'
 import type {
   LoginPrototypeState,
+  PasswordRecoveryMessagesState,
+  PasswordRecoveryNewPasswordState,
+  PasswordRecoveryRequestState,
   PrototypeScreenId,
   PrototypeViewId,
+  RecoveryChannel,
   RegistrationStepOneState,
   RegistrationStepThreeState,
   RegistrationStepTwoState,
@@ -25,6 +29,13 @@ import { RegistrationStepOne } from './registration/RegistrationStepOne'
 import { RegistrationStepThree } from './registration/RegistrationStepThree'
 import { RegistrationStepTwo } from './registration/RegistrationStepTwo'
 import { RegistrationSuccess } from './registration/RegistrationSuccess'
+import { PasswordRecoveryMessages } from './passwordRecovery/PasswordRecoveryMessages'
+import { PasswordRecoveryNewPassword } from './passwordRecovery/PasswordRecoveryNewPassword'
+import { PasswordRecoveryRequest } from './passwordRecovery/PasswordRecoveryRequest'
+
+function getMessagesViewId(channel: RecoveryChannel): PrototypeViewId {
+  return `passwordRecoveryMessages.${channel}`
+}
 
 export function PrototypeShell() {
   const theme = useTheme()
@@ -71,6 +82,9 @@ export function PrototypeShell() {
         break
       case 'registrationSuccess':
       case 'emailConfirmed':
+      case 'passwordRecoveryRequest':
+      case 'passwordRecoveryMessages':
+      case 'passwordRecoveryNewPassword':
         navigateTo('login.empty')
         break
       default:
@@ -117,6 +131,36 @@ export function PrototypeShell() {
     )
   }
 
+  const handlePasswordRecoverySubmit = (
+    state: PasswordRecoveryRequestState,
+    channel: RecoveryChannel,
+  ) => {
+    if (state.stateKey === 'blocked') {
+      navigateTo('passwordRecoveryRequest.blocked')
+      return
+    }
+
+    if (!state.identifier.value.trim()) {
+      navigateTo('passwordRecoveryRequest.required')
+      return
+    }
+
+    navigateTo(getMessagesViewId(channel))
+  }
+
+  const handlePasswordResetSubmit = (state: PasswordRecoveryNewPasswordState) => {
+    if (state.stateKey === 'valid') {
+      navigateTo('passwordRecoveryNewPassword.valid')
+      return
+    }
+
+    navigateTo(
+      state.stateKey === 'invalid'
+        ? 'passwordRecoveryNewPassword.invalid'
+        : 'passwordRecoveryNewPassword.required',
+    )
+  }
+
   const renderScreen = () => {
     switch (currentState.screenId) {
       case 'login':
@@ -125,6 +169,7 @@ export function PrototypeShell() {
             key={currentState.id}
             state={currentState as LoginPrototypeState}
             onCreateAccount={() => navigateTo('registrationStepOne.empty')}
+            onForgotPassword={() => navigateTo('passwordRecoveryRequest.empty')}
           />
         )
       case 'registrationStepOne':
@@ -174,6 +219,44 @@ export function PrototypeShell() {
           <EmailConfirmed
             key={currentState.id}
             onGoToLogin={() => navigateTo('login.empty')}
+          />
+        )
+      case 'passwordRecoveryRequest':
+        return (
+          <PasswordRecoveryRequest
+            key={currentState.id}
+            state={currentState as PasswordRecoveryRequestState}
+            onSubmit={(channel) =>
+              handlePasswordRecoverySubmit(
+                currentState as PasswordRecoveryRequestState,
+                channel,
+              )
+            }
+            onGoToLogin={() => navigateTo('login.empty')}
+            onContactSupport={() => window.console.log('contact-support')}
+          />
+        )
+      case 'passwordRecoveryMessages':
+        return (
+          <PasswordRecoveryMessages
+            key={currentState.id}
+            state={currentState as PasswordRecoveryMessagesState}
+            onGoToLogin={() => navigateTo('login.empty')}
+            onSimulateLinkClick={() => navigateTo('passwordRecoveryNewPassword.empty')}
+            onResend={(channel) => navigateTo(getMessagesViewId(channel))}
+          />
+        )
+      case 'passwordRecoveryNewPassword':
+        return (
+          <PasswordRecoveryNewPassword
+            key={currentState.id}
+            state={currentState as PasswordRecoveryNewPasswordState}
+            onSubmit={() =>
+              handlePasswordResetSubmit(
+                currentState as PasswordRecoveryNewPasswordState,
+              )
+            }
+            onAutoRedirectToLogin={() => navigateTo('login.empty')}
           />
         )
       default:
@@ -235,7 +318,7 @@ export function PrototypeShell() {
               <Chip
                 label={currentState.label}
                 sx={{
-                  maxWidth: 220,
+                  maxWidth: 260,
                   bgcolor: 'rgba(255,255,255,0.9)',
                   color: 'text.primary',
                   boxShadow: '0 10px 24px rgba(15, 23, 42, 0.1)',

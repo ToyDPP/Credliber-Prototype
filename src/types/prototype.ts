@@ -5,6 +5,11 @@ export type PrototypeScreenId =
   | 'registrationStepThree'
   | 'registrationSuccess'
   | 'emailConfirmed'
+  | 'passwordRecoveryRequest'
+  | 'passwordRecoveryMessages'
+  | 'passwordRecoveryNewPassword'
+
+export type RecoveryChannel = 'whatsapp' | 'email' | 'sms'
 
 export type LoginPrototypeStateKey =
   | 'empty'
@@ -25,6 +30,17 @@ export type RegistrationFormStateKey =
 export type RegistrationSuccessStateKey = 'sent'
 export type EmailConfirmedStateKey = 'confirmed'
 
+export type PasswordRecoveryRequestStateKey =
+  | 'empty'
+  | 'whatsapp'
+  | 'email'
+  | 'sms'
+  | 'required'
+  | 'blocked'
+
+export type PasswordRecoveryMessagesStateKey = RecoveryChannel
+export type PasswordRecoveryNewPasswordStateKey = RegistrationFormStateKey
+
 export type LoginPrototypeViewId = `login.${LoginPrototypeStateKey}`
 export type RegistrationStepOneViewId =
   `registrationStepOne.${RegistrationFormStateKey}`
@@ -36,6 +52,12 @@ export type RegistrationSuccessViewId =
   `registrationSuccess.${RegistrationSuccessStateKey}`
 export type EmailConfirmedViewId =
   `emailConfirmed.${EmailConfirmedStateKey}`
+export type PasswordRecoveryRequestViewId =
+  `passwordRecoveryRequest.${PasswordRecoveryRequestStateKey}`
+export type PasswordRecoveryMessagesViewId =
+  `passwordRecoveryMessages.${PasswordRecoveryMessagesStateKey}`
+export type PasswordRecoveryNewPasswordViewId =
+  `passwordRecoveryNewPassword.${PasswordRecoveryNewPasswordStateKey}`
 
 export type PrototypeViewId =
   | LoginPrototypeViewId
@@ -44,6 +66,9 @@ export type PrototypeViewId =
   | RegistrationStepThreeViewId
   | RegistrationSuccessViewId
   | EmailConfirmedViewId
+  | PasswordRecoveryRequestViewId
+  | PasswordRecoveryMessagesViewId
+  | PasswordRecoveryNewPasswordViewId
 
 export type PasswordChecklistStatus = 'neutral' | 'success' | 'error'
 
@@ -127,6 +152,32 @@ export interface EmailConfirmedState extends PrototypeBaseState {
   stateKey: EmailConfirmedStateKey
 }
 
+export interface PasswordRecoveryRequestState extends PrototypeBaseState {
+  id: PasswordRecoveryRequestViewId
+  screenId: 'passwordRecoveryRequest'
+  stateKey: PasswordRecoveryRequestStateKey
+  identifier: PrototypeFieldState
+  selectedChannel: RecoveryChannel
+}
+
+export interface PasswordRecoveryMessagesState extends PrototypeBaseState {
+  id: PasswordRecoveryMessagesViewId
+  screenId: 'passwordRecoveryMessages'
+  stateKey: PasswordRecoveryMessagesStateKey
+  selectedChannel: RecoveryChannel
+}
+
+export interface PasswordRecoveryNewPasswordState extends PrototypeBaseState {
+  id: PasswordRecoveryNewPasswordViewId
+  screenId: 'passwordRecoveryNewPassword'
+  stateKey: PasswordRecoveryNewPasswordStateKey
+  password: PrototypeFieldState
+  confirmPassword: PrototypeFieldState
+  passwordVisible: boolean
+  confirmPasswordVisible: boolean
+  checklist: PasswordChecklistItem[]
+}
+
 export type PrototypeScreenState =
   | LoginPrototypeState
   | RegistrationStepOneState
@@ -134,6 +185,9 @@ export type PrototypeScreenState =
   | RegistrationStepThreeState
   | RegistrationSuccessState
   | EmailConfirmedState
+  | PasswordRecoveryRequestState
+  | PasswordRecoveryMessagesState
+  | PasswordRecoveryNewPasswordState
 
 export interface PrototypeNavigationChild {
   id: PrototypeViewId

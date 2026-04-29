@@ -25,6 +25,7 @@ interface LoginFormProps {
   onTogglePasswordVisibility: () => void
   onToggleRememberMe: () => void
   onCreateAccount: () => void
+  onForgotPassword: () => void
 }
 
 export function LoginForm({
@@ -32,6 +33,7 @@ export function LoginForm({
   onTogglePasswordVisibility,
   onToggleRememberMe,
   onCreateAccount,
+  onForgotPassword,
 }: LoginFormProps) {
   const passwordIcon = state.passwordVisible ? (
     <VisibilityRoundedIcon />
@@ -173,6 +175,7 @@ export function LoginForm({
           type="button"
           underline="none"
           color="primary"
+          onClick={onForgotPassword}
           sx={{
             alignSelf: 'center',
             fontSize: '1rem',
