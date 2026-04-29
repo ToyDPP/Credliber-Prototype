@@ -10,6 +10,7 @@ import {
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded'
 import { prototypeNavigation, prototypeStateMap } from '../data/prototypeNavigation'
 import type {
+  CommercialDashboardState,
   LoginPrototypeState,
   PasswordRecoveryMessagesState,
   PasswordRecoveryNewPasswordState,
@@ -22,6 +23,7 @@ import type {
   RegistrationStepTwoState,
   RegistrationSuccessState,
 } from '../types/prototype'
+import { CommercialDashboard } from '../pages/commercial/CommercialDashboard'
 import { LoginScreen } from './LoginScreen'
 import { PrototypeSidebar } from './PrototypeSidebar'
 import { EmailConfirmed } from './registration/EmailConfirmed'
@@ -161,6 +163,29 @@ export function PrototypeShell() {
     )
   }
 
+  const handleLoginSubmit = (state: LoginPrototypeState) => {
+    if (state.loading) {
+      return
+    }
+
+    switch (state.stateKey) {
+      case 'filled':
+      case 'passwordVisible':
+      case 'rememberMe':
+        navigateTo('commercialDashboard.firstAccess')
+        break
+      case 'invalid':
+        navigateTo('login.invalid')
+        break
+      case 'generalError':
+        navigateTo('login.generalError')
+        break
+      default:
+        navigateTo('login.required')
+        break
+    }
+  }
+
   const renderScreen = () => {
     switch (currentState.screenId) {
       case 'login':
@@ -168,6 +193,7 @@ export function PrototypeShell() {
           <LoginScreen
             key={currentState.id}
             state={currentState as LoginPrototypeState}
+            onSubmit={() => handleLoginSubmit(currentState as LoginPrototypeState)}
             onCreateAccount={() => navigateTo('registrationStepOne.empty')}
             onForgotPassword={() => navigateTo('passwordRecoveryRequest.empty')}
           />
@@ -259,6 +285,14 @@ export function PrototypeShell() {
             onAutoRedirectToLogin={() => navigateTo('login.empty')}
           />
         )
+      case 'commercialDashboard':
+        return (
+          <CommercialDashboard
+            key={currentState.id}
+            state={currentState as CommercialDashboardState}
+            onBackToLogin={() => navigateTo('login.empty')}
+          />
+        )
       default:
         return null
     }
@@ -303,7 +337,7 @@ export function PrototypeShell() {
                 startIcon={<MenuRoundedIcon />}
                 sx={{
                   minHeight: 44,
-                  borderRadius: 999,
+                  borderRadius: '8px',
                   px: 2.1,
                   color: 'text.primary',
                   bgcolor: 'rgba(255,255,255,0.94)',
@@ -319,6 +353,7 @@ export function PrototypeShell() {
                 label={currentState.label}
                 sx={{
                   maxWidth: 260,
+                  borderRadius: '4px',
                   bgcolor: 'rgba(255,255,255,0.9)',
                   color: 'text.primary',
                   boxShadow: '0 10px 24px rgba(15, 23, 42, 0.1)',

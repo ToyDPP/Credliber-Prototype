@@ -35,7 +35,7 @@ export function RegistrationSuccess({
 
         <Alert
           sx={{
-            borderRadius: 2.5,
+            borderRadius: '8px',
             px: 2.4,
             py: 2.1,
             bgcolor: 'rgba(242, 10, 91, 0.08)',
@@ -74,7 +74,7 @@ export function RegistrationSuccess({
               sx={{
                 width: 34,
                 height: 34,
-                borderRadius: 2,
+                borderRadius: '8px',
                 display: 'grid',
                 placeItems: 'center',
                 bgcolor: 'rgba(242, 10, 91, 0.12)',

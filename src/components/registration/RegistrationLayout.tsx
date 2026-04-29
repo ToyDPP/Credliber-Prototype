@@ -63,7 +63,7 @@ export function RegistrationLayout({
               sx={{
                 width: 58,
                 height: 58,
-                borderRadius: 2.25,
+                borderRadius: '8px',
                 bgcolor: 'rgba(242, 10, 91, 0.1)',
                 color: 'primary.main',
                 mb: { xs: 4, md: 5 },

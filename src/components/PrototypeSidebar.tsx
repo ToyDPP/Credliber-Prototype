@@ -91,7 +91,7 @@ function SidebarContent({
                     minHeight: 46,
                     px: 1.25,
                     py: 1,
-                    borderRadius: 2,
+                    borderRadius: '8px',
                     bgcolor: hasActiveChild
                       ? 'rgba(242, 10, 91, 0.14)'
                       : 'transparent',
@@ -144,7 +144,7 @@ function SidebarContent({
                             minHeight: 42,
                             px: 1.25,
                             py: 0.9,
-                            borderRadius: 2,
+                            borderRadius: '8px',
                             alignItems: 'flex-start',
                             bgcolor: active
                               ? 'rgba(242, 10, 91, 0.18)'

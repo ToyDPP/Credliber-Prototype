@@ -24,6 +24,7 @@ interface LoginFormProps {
   state: LoginPrototypeState
   onTogglePasswordVisibility: () => void
   onToggleRememberMe: () => void
+  onSubmit: () => void
   onCreateAccount: () => void
   onForgotPassword: () => void
 }
@@ -32,6 +33,7 @@ export function LoginForm({
   state,
   onTogglePasswordVisibility,
   onToggleRememberMe,
+  onSubmit,
   onCreateAccount,
   onForgotPassword,
 }: LoginFormProps) {
@@ -152,6 +154,7 @@ export function LoginForm({
           color="primary"
           fullWidth
           disabled={state.loading}
+          onClick={onSubmit}
           endIcon={!state.loading ? <ArrowForwardRoundedIcon /> : undefined}
         >
           {state.loading ? (

@@ -33,7 +33,7 @@ export function DottedBackground() {
           backgroundImage: dotPattern,
           backgroundSize: '18px 18px',
           opacity: 0.5,
-          borderRadius: '44% 56% 40% 60% / 22% 48% 52% 78%',
+          borderRadius: '12px',
           transform: 'rotate(14deg)',
         }}
       />
@@ -47,7 +47,7 @@ export function DottedBackground() {
           backgroundImage: dotPattern,
           backgroundSize: '18px 18px',
           opacity: 0.36,
-          borderRadius: '50%',
+          borderRadius: '12px',
           filter: 'blur(0.15px)',
         }}
       />
@@ -61,7 +61,7 @@ export function DottedBackground() {
           backgroundImage: dotPattern,
           backgroundSize: '16px 16px',
           opacity: 0.22,
-          borderRadius: '999px',
+          borderRadius: '12px',
           transform: 'rotate(-10deg)',
         }}
       />
@@ -75,7 +75,7 @@ export function DottedBackground() {
           backgroundImage: dotPattern,
           backgroundSize: '20px 20px',
           opacity: 0.3,
-          borderRadius: '48% 52% 58% 42% / 56% 34% 66% 44%',
+          borderRadius: '12px',
           transform: 'rotate(18deg)',
         }}
       />

@@ -90,7 +90,7 @@ export function PasswordRecoveryMessages({
           elevation={0}
           sx={{
             p: 2.1,
-            borderRadius: 2.5,
+            borderRadius: '8px',
             border: '1px solid rgba(184, 195, 211, 0.28)',
             boxShadow: '0 14px 24px rgba(15, 23, 42, 0.06)',
           }}
@@ -130,7 +130,7 @@ export function PasswordRecoveryMessages({
           elevation={0}
           sx={{
             p: 1.8,
-            borderRadius: 2.5,
+            borderRadius: '8px',
             border: '1px solid rgba(184, 195, 211, 0.24)',
             boxShadow: '0 14px 24px rgba(15, 23, 42, 0.05)',
           }}
@@ -141,7 +141,7 @@ export function PasswordRecoveryMessages({
                 sx={{
                   width: 32,
                   height: 32,
-                  borderRadius: 2,
+                  borderRadius: '8px',
                   display: 'grid',
                   placeItems: 'center',
                   bgcolor: 'rgba(242, 10, 91, 0.12)',

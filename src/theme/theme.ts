@@ -29,7 +29,7 @@ export const appTheme = createTheme({
     divider: dividerColor,
   },
   shape: {
-    borderRadius: 18,
+    borderRadius: 8,
   },
   typography: {
     fontFamily: 'Inter, Roboto, "Helvetica Neue", Arial, sans-serif',
@@ -83,7 +83,7 @@ export const appTheme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 16,
+          borderRadius: 8,
           minHeight: 56,
           fontWeight: 700,
           boxShadow: 'none',
@@ -118,7 +118,7 @@ export const appTheme = createTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         root: ({ theme }) => ({
-          borderRadius: 16,
+          borderRadius: 8,
           backgroundColor: '#FFFFFF',
           transition: theme.transitions.create(['box-shadow', 'border-color']),
           '& .MuiOutlinedInput-input': {
@@ -184,7 +184,7 @@ export const appTheme = createTheme({
     MuiAlert: {
       styleOverrides: {
         root: ({ theme }) => ({
-          borderRadius: 16,
+          borderRadius: 8,
           border: `1px solid ${alpha(theme.palette.error.main, 0.18)}`,
           backgroundColor: alpha(theme.palette.error.main, 0.08),
           color: theme.palette.text.primary,
@@ -192,6 +192,41 @@ export const appTheme = createTheme({
             color: theme.palette.error.main,
           },
         }),
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 8,
+        },
+      },
+    },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          borderRadius: 12,
+        },
+      },
+    },
+    MuiPopover: {
+      styleOverrides: {
+        paper: {
+          borderRadius: 8,
+        },
+      },
+    },
+    MuiMenu: {
+      styleOverrides: {
+        paper: {
+          borderRadius: 8,
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 4,
+        },
       },
     },
   },

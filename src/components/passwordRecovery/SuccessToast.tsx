@@ -26,7 +26,7 @@ export function SuccessToast({ message }: SuccessToastProps) {
         gap: 1.5,
         px: 2.1,
         py: 1.7,
-        borderRadius: 2.25,
+        borderRadius: '8px',
         border: '1px solid rgba(34, 139, 84, 0.82)',
         bgcolor: 'rgba(231, 246, 236, 0.94)',
         color: '#228B54',

@@ -8,6 +8,7 @@ export type PrototypeScreenId =
   | 'passwordRecoveryRequest'
   | 'passwordRecoveryMessages'
   | 'passwordRecoveryNewPassword'
+  | 'commercialDashboard'
 
 export type RecoveryChannel = 'whatsapp' | 'email' | 'sms'
 
@@ -40,6 +41,11 @@ export type PasswordRecoveryRequestStateKey =
 
 export type PasswordRecoveryMessagesStateKey = RecoveryChannel
 export type PasswordRecoveryNewPasswordStateKey = RegistrationFormStateKey
+export type CommercialDashboardStateKey =
+  | 'expanded'
+  | 'firstAccess'
+  | 'profileMenu'
+  | 'collapsed'
 
 export type LoginPrototypeViewId = `login.${LoginPrototypeStateKey}`
 export type RegistrationStepOneViewId =
@@ -58,6 +64,8 @@ export type PasswordRecoveryMessagesViewId =
   `passwordRecoveryMessages.${PasswordRecoveryMessagesStateKey}`
 export type PasswordRecoveryNewPasswordViewId =
   `passwordRecoveryNewPassword.${PasswordRecoveryNewPasswordStateKey}`
+export type CommercialDashboardViewId =
+  `commercialDashboard.${CommercialDashboardStateKey}`
 
 export type PrototypeViewId =
   | LoginPrototypeViewId
@@ -69,6 +77,7 @@ export type PrototypeViewId =
   | PasswordRecoveryRequestViewId
   | PasswordRecoveryMessagesViewId
   | PasswordRecoveryNewPasswordViewId
+  | CommercialDashboardViewId
 
 export type PasswordChecklistStatus = 'neutral' | 'success' | 'error'
 
@@ -178,6 +187,16 @@ export interface PasswordRecoveryNewPasswordState extends PrototypeBaseState {
   checklist: PasswordChecklistItem[]
 }
 
+export interface CommercialDashboardState extends PrototypeBaseState {
+  id: CommercialDashboardViewId
+  screenId: 'commercialDashboard'
+  stateKey: CommercialDashboardStateKey
+  collapsed: boolean
+  showFirstAccessModal: boolean
+  showProfileMenu: boolean
+  showBanner: boolean
+}
+
 export type PrototypeScreenState =
   | LoginPrototypeState
   | RegistrationStepOneState
@@ -188,6 +207,7 @@ export type PrototypeScreenState =
   | PasswordRecoveryRequestState
   | PasswordRecoveryMessagesState
   | PasswordRecoveryNewPasswordState
+  | CommercialDashboardState
 
 export interface PrototypeNavigationChild {
   id: PrototypeViewId

@@ -6,12 +6,14 @@ import type { LoginPrototypeState } from '../types/prototype'
 
 interface LoginScreenProps {
   state: LoginPrototypeState
+  onSubmit: () => void
   onCreateAccount: () => void
   onForgotPassword: () => void
 }
 
 export function LoginScreen({
   state,
+  onSubmit,
   onCreateAccount,
   onForgotPassword,
 }: LoginScreenProps) {
@@ -82,6 +84,7 @@ export function LoginScreen({
         >
           <LoginForm
             state={renderedState}
+            onSubmit={onSubmit}
             onTogglePasswordVisibility={() => {
               if (!state.loading) {
                 setPasswordVisible((current) => !current)

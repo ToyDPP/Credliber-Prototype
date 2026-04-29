@@ -1,4 +1,10 @@
+import { commercialDashboardStates } from './commercialDashboardStates'
 import { loginStates } from './loginStates'
+import {
+  passwordRecoveryMessagesStates,
+  passwordRecoveryNewPasswordStates,
+  passwordRecoveryRequestStates,
+} from './passwordRecoveryStates'
 import {
   emailConfirmedStates,
   registrationStepOneStates,
@@ -6,11 +12,6 @@ import {
   registrationStepTwoStates,
   registrationSuccessStates,
 } from './registrationStates'
-import {
-  passwordRecoveryMessagesStates,
-  passwordRecoveryNewPasswordStates,
-  passwordRecoveryRequestStates,
-} from './passwordRecoveryStates'
 import type {
   PrototypeNavigationGroup,
   PrototypeScreenState,
@@ -27,6 +28,7 @@ export const prototypeStates: PrototypeScreenState[] = [
   ...passwordRecoveryRequestStates,
   ...passwordRecoveryMessagesStates,
   ...passwordRecoveryNewPasswordStates,
+  ...commercialDashboardStates,
 ]
 
 export const prototypeStateMap = Object.fromEntries(
@@ -118,5 +120,14 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
         screenId,
       }),
     ),
+  },
+  {
+    id: 'commercialDashboard',
+    label: 'Comercial _ Dashboard',
+    children: commercialDashboardStates.map(({ id, label, screenId }) => ({
+      id,
+      label,
+      screenId,
+    })),
   },
 ]

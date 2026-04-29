@@ -32,7 +32,7 @@ export function EmailConfirmed({ onGoToLogin }: EmailConfirmedProps) {
             sx={{
               width: 56,
               height: 56,
-              borderRadius: 2.5,
+              borderRadius: '8px',
               display: 'grid',
               placeItems: 'center',
               bgcolor: 'rgba(34, 197, 94, 0.12)',
