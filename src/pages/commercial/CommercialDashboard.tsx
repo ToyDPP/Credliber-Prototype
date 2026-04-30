@@ -43,6 +43,7 @@ type CompleteRegistrationFlowState =
 interface CommercialDashboardProps {
   state: CommercialDashboardState
   onBackToLogin: () => void
+  onOpenMyAccount?: () => void
   initialCompleteRegistrationState?: CompleteRegistrationFlowState | null
   onReturnToDashboard?: () => void
   onDocumentContinue?: (state: CompleteRegistrationDocumentState) => void
@@ -79,6 +80,7 @@ const feedbackConfirmedState = completeRegistrationFeedbackStates.find(
 export function CommercialDashboard({
   state,
   onBackToLogin,
+  onOpenMyAccount,
   initialCompleteRegistrationState = null,
   onReturnToDashboard,
   onDocumentContinue,
@@ -326,6 +328,7 @@ export function CommercialDashboard({
         onCloseProfileMenu={() => setShowProfileMenu(false)}
         onCloseFirstAccessModal={() => setShowFirstAccessModal(false)}
         onConcludeRegistration={openDocumentFlow}
+        onOpenMyAccount={onOpenMyAccount}
         onBackToLogin={onBackToLogin}
       >
         <Stack

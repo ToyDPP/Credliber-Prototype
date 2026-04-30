@@ -6,6 +6,7 @@ import {
 } from './completeRegistrationStates'
 import { commercialDashboardStates } from './commercialDashboardStates'
 import { loginStates } from './loginStates'
+import { profileAccountStates } from './profileStates'
 import {
   passwordRecoveryMessagesStates,
   passwordRecoveryNewPasswordStates,
@@ -39,6 +40,7 @@ export const prototypeStates: PrototypeScreenState[] = [
   ...completeRegistrationBankStates,
   ...completeRegistrationBiometryStates,
   ...completeRegistrationFeedbackStates,
+  ...profileAccountStates,
 ]
 
 export const prototypeStateMap = Object.fromEntries(
@@ -181,5 +183,55 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
         screenId,
       }),
     ),
+  },
+  {
+    id: 'profile-account',
+    label: 'Perfil _ Minha Conta',
+    children: profileAccountStates
+      .filter(({ stateKey }) =>
+        [
+          'menuExpanded',
+          'sidebarCollapsed',
+          'fieldsOpen',
+          'fieldsLocked',
+          'biometryApproved',
+          'biometryPending',
+          'biometryRejected',
+          'biometryRetry',
+        ].includes(stateKey),
+      )
+      .map(({ id, label, screenId }) => ({
+        id,
+        label,
+        screenId,
+      })),
+  },
+  {
+    id: 'profile-photo',
+    label: 'Perfil _ Minha Conta _ Foto',
+    children: profileAccountStates
+      .filter(({ stateKey }) =>
+        ['changePhoto', 'photoChanged', 'removePhoto', 'removePhotoConfirm'].includes(
+          stateKey,
+        ),
+      )
+      .map(({ id, label, screenId }) => ({
+        id,
+        label,
+        screenId,
+      })),
+  },
+  {
+    id: 'profile-feedback',
+    label: 'Perfil _ Minha Conta _ Feedbacks',
+    children: profileAccountStates
+      .filter(({ stateKey }) =>
+        ['saved', 'invalid', 'saveError', 'unsavedConfirm'].includes(stateKey),
+      )
+      .map(({ id, label, screenId }) => ({
+        id,
+        label,
+        screenId,
+      })),
   },
 ]

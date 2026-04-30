@@ -20,6 +20,8 @@ import type {
   PasswordRecoveryMessagesState,
   PasswordRecoveryNewPasswordState,
   PasswordRecoveryRequestState,
+  ProfileAccountState,
+  ProfileAccountViewId,
   PrototypeGroupId,
   PrototypeScreenId,
   PrototypeViewId,
@@ -30,6 +32,7 @@ import type {
   RegistrationSuccessState,
 } from '../types/prototype'
 import { CommercialDashboard } from '../pages/commercial/CommercialDashboard'
+import { ProfileAccountPage } from '../pages/profile/ProfileAccountPage'
 import { LoginScreen } from './LoginScreen'
 import { PrototypeSidebar } from './PrototypeSidebar'
 import { PasswordRecoveryMessages } from './passwordRecovery/PasswordRecoveryMessages'
@@ -256,6 +259,10 @@ export function PrototypeShell() {
     }
   }
 
+  const openProfile = (viewId: ProfileAccountViewId = 'profileAccount.biometryApproved') => {
+    navigateTo(viewId)
+  }
+
   const renderScreen = () => {
     switch (currentState.screenId) {
       case 'login':
@@ -360,6 +367,7 @@ export function PrototypeShell() {
           <CommercialDashboard
             key={currentState.id}
             state={currentState as CommercialDashboardState}
+            onOpenMyAccount={() => openProfile()}
             onBackToLogin={() => navigateTo('login.empty')}
           />
         )
@@ -375,6 +383,7 @@ export function PrototypeShell() {
             onDocumentContinue={(state) =>
               handleCompleteRegistrationDocumentContinue(state)
             }
+            onOpenMyAccount={() => openProfile()}
             onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
             onBackToLogin={() => navigateTo('login.empty')}
           />
@@ -390,6 +399,7 @@ export function PrototypeShell() {
             }}
             onBankContinue={(state) => handleCompleteRegistrationBankContinue(state)}
             onBankBack={() => navigateTo('completeRegistrationDocument.valid')}
+            onOpenMyAccount={() => openProfile()}
             onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
             onBackToLogin={() => navigateTo('login.empty')}
           />
@@ -411,6 +421,7 @@ export function PrototypeShell() {
             onBiometrySimulateSuccess={() =>
               navigateTo('completeRegistrationBiometry.success')
             }
+            onOpenMyAccount={() => openProfile()}
             onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
             onBackToLogin={() => navigateTo('login.empty')}
           />
@@ -424,7 +435,18 @@ export function PrototypeShell() {
               kind: 'feedback',
               state: currentState as CompleteRegistrationFeedbackState,
             }}
+            onOpenMyAccount={() => openProfile()}
             onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
+            onBackToLogin={() => navigateTo('login.empty')}
+          />
+        )
+      case 'profileAccount':
+        return (
+          <ProfileAccountPage
+            key={currentState.id}
+            state={currentState as ProfileAccountState}
+            onNavigate={(viewId) => navigateTo(viewId)}
+            onGoToDashboard={() => navigateTo('commercialDashboard.expanded')}
             onBackToLogin={() => navigateTo('login.empty')}
           />
         )

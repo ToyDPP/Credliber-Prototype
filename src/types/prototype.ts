@@ -13,6 +13,7 @@ export type PrototypeScreenId =
   | 'completeRegistrationBank'
   | 'completeRegistrationBiometry'
   | 'completeRegistrationFeedback'
+  | 'profileAccount'
 
 export type PrototypeGroupId = string
 
@@ -62,6 +63,23 @@ export type CompleteRegistrationBiometryStateKey =
 export type CompleteRegistrationFeedbackStateKey =
   | 'emailConfirmed'
   | 'emailNotConfirmed'
+export type ProfileAccountStateKey =
+  | 'menuExpanded'
+  | 'sidebarCollapsed'
+  | 'fieldsOpen'
+  | 'fieldsLocked'
+  | 'biometryApproved'
+  | 'biometryPending'
+  | 'biometryRejected'
+  | 'biometryRetry'
+  | 'changePhoto'
+  | 'photoChanged'
+  | 'removePhoto'
+  | 'removePhotoConfirm'
+  | 'saved'
+  | 'invalid'
+  | 'saveError'
+  | 'unsavedConfirm'
 
 export type LoginPrototypeViewId = `login.${LoginPrototypeStateKey}`
 export type RegistrationStepOneViewId =
@@ -89,6 +107,7 @@ export type CompleteRegistrationBiometryViewId =
   `completeRegistrationBiometry.${CompleteRegistrationBiometryStateKey}`
 export type CompleteRegistrationFeedbackViewId =
   `completeRegistrationFeedback.${CompleteRegistrationFeedbackStateKey}`
+export type ProfileAccountViewId = `profileAccount.${ProfileAccountStateKey}`
 
 export type PrototypeViewId =
   | LoginPrototypeViewId
@@ -105,6 +124,7 @@ export type PrototypeViewId =
   | CompleteRegistrationBankViewId
   | CompleteRegistrationBiometryViewId
   | CompleteRegistrationFeedbackViewId
+  | ProfileAccountViewId
 
 export type PasswordChecklistStatus = 'neutral' | 'success' | 'error'
 
@@ -114,6 +134,7 @@ export interface PrototypeFieldState {
   error?: string
   showAlertIcon?: boolean
   selectLike?: boolean
+  locked?: boolean
 }
 
 export interface PasswordChecklistItem {
@@ -258,6 +279,52 @@ export interface CompleteRegistrationFeedbackState extends PrototypeBaseState {
   stateKey: CompleteRegistrationFeedbackStateKey
 }
 
+export type ProfileToastType = 'success' | 'warning' | 'error'
+export type ProfileBiometryStatus =
+  | 'approved'
+  | 'pending'
+  | 'rejected'
+  | 'retry'
+
+export interface ProfileToastState {
+  type: ProfileToastType
+  message: string
+}
+
+export interface ProfileAccountState extends PrototypeBaseState {
+  id: ProfileAccountViewId
+  screenId: 'profileAccount'
+  stateKey: ProfileAccountStateKey
+  collapsed: boolean
+  showProfileMenu: boolean
+  hasPhoto: boolean
+  showChangePhotoModal: boolean
+  showRemovePhotoModal: boolean
+  showUnsavedChangesModal: boolean
+  hasUnsavedChanges: boolean
+  fieldsOpen: boolean
+  toast?: ProfileToastState
+  biometryStatus: ProfileBiometryStatus
+  fullName: PrototypeFieldState
+  cpf: PrototypeFieldState
+  birthDate: PrototypeFieldState
+  email: PrototypeFieldState
+  whatsapp: PrototypeFieldState
+  cep: PrototypeFieldState
+  state: PrototypeFieldState
+  city: PrototypeFieldState
+  neighborhood: PrototypeFieldState
+  address: PrototypeFieldState
+  number: PrototypeFieldState
+  complement: PrototypeFieldState
+  documentType: PrototypeFieldState
+  documentNumber: PrototypeFieldState
+  issuingAgency: PrototypeFieldState
+  issuingState: PrototypeFieldState
+  issueDate: PrototypeFieldState
+  expiryDate: PrototypeFieldState
+}
+
 export type PrototypeScreenState =
   | LoginPrototypeState
   | RegistrationStepOneState
@@ -273,6 +340,7 @@ export type PrototypeScreenState =
   | CompleteRegistrationBankState
   | CompleteRegistrationBiometryState
   | CompleteRegistrationFeedbackState
+  | ProfileAccountState
 
 export interface PrototypeNavigationChild {
   id: PrototypeViewId

@@ -6,12 +6,14 @@ import type { AppUserProfile } from '../../data/appNavigation'
 interface UserProfileMenuProps {
   open: boolean
   user: AppUserProfile
+  onOpenMyAccount?: () => void
   onLogout: () => void
 }
 
 export function UserProfileMenu({
   open,
   user,
+  onOpenMyAccount,
   onLogout,
 }: UserProfileMenuProps) {
   if (!open) {
@@ -69,10 +71,12 @@ export function UserProfileMenu({
         <Stack
           direction="row"
           spacing={1.25}
+          onClick={onOpenMyAccount}
           sx={{
             alignItems: 'center',
             px: 2,
             py: 1.35,
+            cursor: onOpenMyAccount ? 'pointer' : 'default',
           }}
         >
           <PersonOutlineRoundedIcon sx={{ color: '#41536A', fontSize: 22 }} />

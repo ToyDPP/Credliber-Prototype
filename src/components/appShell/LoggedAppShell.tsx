@@ -15,6 +15,7 @@ interface LoggedAppShellProps {
   onCloseProfileMenu: () => void
   onCloseFirstAccessModal: () => void
   onConcludeRegistration: () => void
+  onOpenMyAccount?: () => void
   onBackToLogin: () => void
   children: ReactNode
 }
@@ -28,6 +29,7 @@ export function LoggedAppShell({
   onCloseProfileMenu,
   onCloseFirstAccessModal,
   onConcludeRegistration,
+  onOpenMyAccount,
   onBackToLogin,
   children,
 }: LoggedAppShellProps) {
@@ -50,6 +52,7 @@ export function LoggedAppShell({
         <UserProfileMenu
           open={showProfileMenu}
           user={appUserProfile}
+          onOpenMyAccount={onOpenMyAccount}
           onLogout={onBackToLogin}
         />
       </Box>
