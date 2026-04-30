@@ -9,6 +9,12 @@ export type PrototypeScreenId =
   | 'passwordRecoveryMessages'
   | 'passwordRecoveryNewPassword'
   | 'commercialDashboard'
+  | 'completeRegistrationDocument'
+  | 'completeRegistrationBank'
+  | 'completeRegistrationBiometry'
+  | 'completeRegistrationFeedback'
+
+export type PrototypeGroupId = string
 
 export type RecoveryChannel = 'whatsapp' | 'email' | 'sms'
 
@@ -46,6 +52,16 @@ export type CommercialDashboardStateKey =
   | 'firstAccess'
   | 'profileMenu'
   | 'collapsed'
+export type CompleteRegistrationDocumentStateKey = RegistrationFormStateKey
+export type CompleteRegistrationBankStateKey = RegistrationFormStateKey
+export type CompleteRegistrationBiometryStateKey =
+  | 'waiting'
+  | 'analyzing'
+  | 'success'
+  | 'error'
+export type CompleteRegistrationFeedbackStateKey =
+  | 'emailConfirmed'
+  | 'emailNotConfirmed'
 
 export type LoginPrototypeViewId = `login.${LoginPrototypeStateKey}`
 export type RegistrationStepOneViewId =
@@ -56,8 +72,7 @@ export type RegistrationStepThreeViewId =
   `registrationStepThree.${RegistrationFormStateKey}`
 export type RegistrationSuccessViewId =
   `registrationSuccess.${RegistrationSuccessStateKey}`
-export type EmailConfirmedViewId =
-  `emailConfirmed.${EmailConfirmedStateKey}`
+export type EmailConfirmedViewId = `emailConfirmed.${EmailConfirmedStateKey}`
 export type PasswordRecoveryRequestViewId =
   `passwordRecoveryRequest.${PasswordRecoveryRequestStateKey}`
 export type PasswordRecoveryMessagesViewId =
@@ -66,6 +81,14 @@ export type PasswordRecoveryNewPasswordViewId =
   `passwordRecoveryNewPassword.${PasswordRecoveryNewPasswordStateKey}`
 export type CommercialDashboardViewId =
   `commercialDashboard.${CommercialDashboardStateKey}`
+export type CompleteRegistrationDocumentViewId =
+  `completeRegistrationDocument.${CompleteRegistrationDocumentStateKey}`
+export type CompleteRegistrationBankViewId =
+  `completeRegistrationBank.${CompleteRegistrationBankStateKey}`
+export type CompleteRegistrationBiometryViewId =
+  `completeRegistrationBiometry.${CompleteRegistrationBiometryStateKey}`
+export type CompleteRegistrationFeedbackViewId =
+  `completeRegistrationFeedback.${CompleteRegistrationFeedbackStateKey}`
 
 export type PrototypeViewId =
   | LoginPrototypeViewId
@@ -78,6 +101,10 @@ export type PrototypeViewId =
   | PasswordRecoveryMessagesViewId
   | PasswordRecoveryNewPasswordViewId
   | CommercialDashboardViewId
+  | CompleteRegistrationDocumentViewId
+  | CompleteRegistrationBankViewId
+  | CompleteRegistrationBiometryViewId
+  | CompleteRegistrationFeedbackViewId
 
 export type PasswordChecklistStatus = 'neutral' | 'success' | 'error'
 
@@ -197,6 +224,40 @@ export interface CommercialDashboardState extends PrototypeBaseState {
   showBanner: boolean
 }
 
+export interface CompleteRegistrationDocumentState extends PrototypeBaseState {
+  id: CompleteRegistrationDocumentViewId
+  screenId: 'completeRegistrationDocument'
+  stateKey: CompleteRegistrationDocumentStateKey
+  documentType: PrototypeFieldState
+  documentNumber: PrototypeFieldState
+  issuingAgency: PrototypeFieldState
+  issuingState: PrototypeFieldState
+  issueDate: PrototypeFieldState
+  expiryDate: PrototypeFieldState
+}
+
+export interface CompleteRegistrationBankState extends PrototypeBaseState {
+  id: CompleteRegistrationBankViewId
+  screenId: 'completeRegistrationBank'
+  stateKey: CompleteRegistrationBankStateKey
+  bank: PrototypeFieldState
+  accountType: PrototypeFieldState
+  branch: PrototypeFieldState
+  account: PrototypeFieldState
+}
+
+export interface CompleteRegistrationBiometryState extends PrototypeBaseState {
+  id: CompleteRegistrationBiometryViewId
+  screenId: 'completeRegistrationBiometry'
+  stateKey: CompleteRegistrationBiometryStateKey
+}
+
+export interface CompleteRegistrationFeedbackState extends PrototypeBaseState {
+  id: CompleteRegistrationFeedbackViewId
+  screenId: 'completeRegistrationFeedback'
+  stateKey: CompleteRegistrationFeedbackStateKey
+}
+
 export type PrototypeScreenState =
   | LoginPrototypeState
   | RegistrationStepOneState
@@ -208,6 +269,10 @@ export type PrototypeScreenState =
   | PasswordRecoveryMessagesState
   | PasswordRecoveryNewPasswordState
   | CommercialDashboardState
+  | CompleteRegistrationDocumentState
+  | CompleteRegistrationBankState
+  | CompleteRegistrationBiometryState
+  | CompleteRegistrationFeedbackState
 
 export interface PrototypeNavigationChild {
   id: PrototypeViewId
@@ -216,7 +281,7 @@ export interface PrototypeNavigationChild {
 }
 
 export interface PrototypeNavigationGroup {
-  id: PrototypeScreenId
+  id: PrototypeGroupId
   label: string
   children: PrototypeNavigationChild[]
 }

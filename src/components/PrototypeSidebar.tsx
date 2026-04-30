@@ -10,8 +10,8 @@ import {
 } from '@mui/material'
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded'
 import type {
+  PrototypeGroupId,
   PrototypeNavigationGroup,
-  PrototypeScreenId,
   PrototypeViewId,
 } from '../types/prototype'
 import { CredliberLogo } from './CredliberLogo'
@@ -19,9 +19,9 @@ import { CredliberLogo } from './CredliberLogo'
 interface PrototypeSidebarProps {
   groups: PrototypeNavigationGroup[]
   selectedStateId: PrototypeViewId
-  expandedGroupIds: PrototypeScreenId[]
+  expandedGroupIds: PrototypeGroupId[]
   onSelect: (stateId: PrototypeViewId) => void
-  onToggleGroup: (groupId: PrototypeScreenId) => void
+  onToggleGroup: (groupId: PrototypeGroupId) => void
   mobile?: boolean
   open?: boolean
   onClose?: () => void

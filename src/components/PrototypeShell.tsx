@@ -8,13 +8,19 @@ import {
   useTheme,
 } from '@mui/material'
 import MenuRoundedIcon from '@mui/icons-material/MenuRounded'
+import { commercialDashboardStates } from '../data/commercialDashboardStates'
 import { prototypeNavigation, prototypeStateMap } from '../data/prototypeNavigation'
 import type {
   CommercialDashboardState,
+  CompleteRegistrationBankState,
+  CompleteRegistrationBiometryState,
+  CompleteRegistrationDocumentState,
+  CompleteRegistrationFeedbackState,
   LoginPrototypeState,
   PasswordRecoveryMessagesState,
   PasswordRecoveryNewPasswordState,
   PasswordRecoveryRequestState,
+  PrototypeGroupId,
   PrototypeScreenId,
   PrototypeViewId,
   RecoveryChannel,
@@ -26,17 +32,25 @@ import type {
 import { CommercialDashboard } from '../pages/commercial/CommercialDashboard'
 import { LoginScreen } from './LoginScreen'
 import { PrototypeSidebar } from './PrototypeSidebar'
+import { PasswordRecoveryMessages } from './passwordRecovery/PasswordRecoveryMessages'
+import { PasswordRecoveryNewPassword } from './passwordRecovery/PasswordRecoveryNewPassword'
+import { PasswordRecoveryRequest } from './passwordRecovery/PasswordRecoveryRequest'
 import { EmailConfirmed } from './registration/EmailConfirmed'
 import { RegistrationStepOne } from './registration/RegistrationStepOne'
 import { RegistrationStepThree } from './registration/RegistrationStepThree'
 import { RegistrationStepTwo } from './registration/RegistrationStepTwo'
 import { RegistrationSuccess } from './registration/RegistrationSuccess'
-import { PasswordRecoveryMessages } from './passwordRecovery/PasswordRecoveryMessages'
-import { PasswordRecoveryNewPassword } from './passwordRecovery/PasswordRecoveryNewPassword'
-import { PasswordRecoveryRequest } from './passwordRecovery/PasswordRecoveryRequest'
 
 function getMessagesViewId(channel: RecoveryChannel): PrototypeViewId {
   return `passwordRecoveryMessages.${channel}`
+}
+
+function findGroupIdByViewId(viewId: PrototypeViewId): PrototypeGroupId | null {
+  const matchingGroup = prototypeNavigation.find((group) =>
+    group.children.some((child) => child.id === viewId),
+  )
+
+  return matchingGroup?.id ?? null
 }
 
 export function PrototypeShell() {
@@ -44,18 +58,23 @@ export function PrototypeShell() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const [selectedStateId, setSelectedStateId] =
     useState<PrototypeViewId>('login.empty')
-  const [expandedGroupIds, setExpandedGroupIds] = useState<PrototypeScreenId[]>(
+  const [expandedGroupIds, setExpandedGroupIds] = useState<PrototypeGroupId[]>(
     [],
   )
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false)
 
   const currentState = prototypeStateMap[selectedStateId]
+  const dashboardBaseState = commercialDashboardStates[0]
 
   const navigateTo = (viewId: PrototypeViewId, autoExpand = true) => {
     setSelectedStateId(viewId)
 
     if (autoExpand) {
-      const targetGroupId = prototypeStateMap[viewId].screenId
+      const targetGroupId = findGroupIdByViewId(viewId)
+
+      if (!targetGroupId) {
+        return
+      }
 
       setExpandedGroupIds((current) =>
         current.includes(targetGroupId) ? current : [...current, targetGroupId],
@@ -63,7 +82,7 @@ export function PrototypeShell() {
     }
   }
 
-  const toggleGroup = (groupId: PrototypeScreenId) => {
+  const toggleGroup = (groupId: PrototypeGroupId) => {
     setExpandedGroupIds((current) =>
       current.includes(groupId)
         ? current.filter((id) => id !== groupId)
@@ -150,7 +169,9 @@ export function PrototypeShell() {
     navigateTo(getMessagesViewId(channel))
   }
 
-  const handlePasswordResetSubmit = (state: PasswordRecoveryNewPasswordState) => {
+  const handlePasswordResetSubmit = (
+    state: PasswordRecoveryNewPasswordState,
+  ) => {
     if (state.stateKey === 'valid') {
       navigateTo('passwordRecoveryNewPassword.valid')
       return
@@ -182,6 +203,55 @@ export function PrototypeShell() {
         break
       default:
         navigateTo('login.required')
+        break
+    }
+  }
+
+  const handleCompleteRegistrationDocumentContinue = (
+    state: CompleteRegistrationDocumentState,
+  ) => {
+    if (state.stateKey === 'valid') {
+      navigateTo('completeRegistrationBank.empty')
+      return
+    }
+
+    navigateTo(
+      state.stateKey === 'invalid'
+        ? 'completeRegistrationDocument.invalid'
+        : 'completeRegistrationDocument.required',
+    )
+  }
+
+  const handleCompleteRegistrationBankContinue = (
+    state: CompleteRegistrationBankState,
+  ) => {
+    if (state.stateKey === 'valid') {
+      navigateTo('completeRegistrationBiometry.waiting')
+      return
+    }
+
+    navigateTo(
+      state.stateKey === 'invalid'
+        ? 'completeRegistrationBank.invalid'
+        : 'completeRegistrationBank.required',
+    )
+  }
+
+  const handleCompleteRegistrationBiometryPrimaryAction = (
+    state: CompleteRegistrationBiometryState,
+  ) => {
+    switch (state.stateKey) {
+      case 'waiting':
+        navigateTo('completeRegistrationBiometry.analyzing')
+        break
+      case 'analyzing':
+      case 'success':
+        navigateTo('completeRegistrationFeedback.emailConfirmed')
+        break
+      case 'error':
+        navigateTo('completeRegistrationBiometry.error')
+        break
+      default:
         break
     }
   }
@@ -290,6 +360,71 @@ export function PrototypeShell() {
           <CommercialDashboard
             key={currentState.id}
             state={currentState as CommercialDashboardState}
+            onBackToLogin={() => navigateTo('login.empty')}
+          />
+        )
+      case 'completeRegistrationDocument':
+        return (
+          <CommercialDashboard
+            key={currentState.id}
+            state={dashboardBaseState}
+            initialCompleteRegistrationState={{
+              kind: 'document',
+              state: currentState as CompleteRegistrationDocumentState,
+            }}
+            onDocumentContinue={(state) =>
+              handleCompleteRegistrationDocumentContinue(state)
+            }
+            onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
+            onBackToLogin={() => navigateTo('login.empty')}
+          />
+        )
+      case 'completeRegistrationBank':
+        return (
+          <CommercialDashboard
+            key={currentState.id}
+            state={dashboardBaseState}
+            initialCompleteRegistrationState={{
+              kind: 'bank',
+              state: currentState as CompleteRegistrationBankState,
+            }}
+            onBankContinue={(state) => handleCompleteRegistrationBankContinue(state)}
+            onBankBack={() => navigateTo('completeRegistrationDocument.valid')}
+            onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
+            onBackToLogin={() => navigateTo('login.empty')}
+          />
+        )
+      case 'completeRegistrationBiometry':
+        return (
+          <CommercialDashboard
+            key={currentState.id}
+            state={dashboardBaseState}
+            initialCompleteRegistrationState={{
+              kind: 'biometry',
+              state: currentState as CompleteRegistrationBiometryState,
+            }}
+            onBiometryPrimaryAction={(state) =>
+              handleCompleteRegistrationBiometryPrimaryAction(state)
+            }
+            onBiometryBack={() => navigateTo('completeRegistrationBank.valid')}
+            onBiometryRetry={() => navigateTo('completeRegistrationBiometry.waiting')}
+            onBiometrySimulateSuccess={() =>
+              navigateTo('completeRegistrationBiometry.success')
+            }
+            onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
+            onBackToLogin={() => navigateTo('login.empty')}
+          />
+        )
+      case 'completeRegistrationFeedback':
+        return (
+          <CommercialDashboard
+            key={currentState.id}
+            state={dashboardBaseState}
+            initialCompleteRegistrationState={{
+              kind: 'feedback',
+              state: currentState as CompleteRegistrationFeedbackState,
+            }}
+            onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
             onBackToLogin={() => navigateTo('login.empty')}
           />
         )

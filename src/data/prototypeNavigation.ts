@@ -1,3 +1,9 @@
+import {
+  completeRegistrationBankStates,
+  completeRegistrationBiometryStates,
+  completeRegistrationDocumentStates,
+  completeRegistrationFeedbackStates,
+} from './completeRegistrationStates'
 import { commercialDashboardStates } from './commercialDashboardStates'
 import { loginStates } from './loginStates'
 import {
@@ -29,6 +35,10 @@ export const prototypeStates: PrototypeScreenState[] = [
   ...passwordRecoveryMessagesStates,
   ...passwordRecoveryNewPasswordStates,
   ...commercialDashboardStates,
+  ...completeRegistrationDocumentStates,
+  ...completeRegistrationBankStates,
+  ...completeRegistrationBiometryStates,
+  ...completeRegistrationFeedbackStates,
 ]
 
 export const prototypeStateMap = Object.fromEntries(
@@ -46,7 +56,7 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
     })),
   },
   {
-    id: 'registrationStepOne',
+    id: 'registration-step-1',
     label: 'Login _ Cadastro 1',
     children: registrationStepOneStates.map(({ id, label, screenId }) => ({
       id,
@@ -55,7 +65,7 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
     })),
   },
   {
-    id: 'registrationStepTwo',
+    id: 'registration-step-2',
     label: 'Login _ Cadastro 2',
     children: registrationStepTwoStates.map(({ id, label, screenId }) => ({
       id,
@@ -64,7 +74,7 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
     })),
   },
   {
-    id: 'registrationStepThree',
+    id: 'registration-step-3',
     label: 'Login _ Cadastro 3',
     children: registrationStepThreeStates.map(({ id, label, screenId }) => ({
       id,
@@ -73,7 +83,7 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
     })),
   },
   {
-    id: 'registrationSuccess',
+    id: 'registration-success',
     label: 'Login _ Confirmação de Cadastro',
     children: registrationSuccessStates.map(({ id, label, screenId }) => ({
       id,
@@ -82,7 +92,7 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
     })),
   },
   {
-    id: 'emailConfirmed',
+    id: 'email-confirmed',
     label: 'Login _ Confirmação de E-mail',
     children: emailConfirmedStates.map(({ id, label, screenId }) => ({
       id,
@@ -91,7 +101,7 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
     })),
   },
   {
-    id: 'passwordRecoveryRequest',
+    id: 'password-recovery-request',
     label: 'Login _ Recuperar Senha',
     children: passwordRecoveryRequestStates.map(({ id, label, screenId }) => ({
       id,
@@ -100,7 +110,7 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
     })),
   },
   {
-    id: 'passwordRecoveryMessages',
+    id: 'password-recovery-messages',
     label: 'Login _ Recuperar Senha _ Verifique suas mensagens',
     children: passwordRecoveryMessagesStates.map(
       ({ id, label, screenId }) => ({
@@ -111,7 +121,7 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
     ),
   },
   {
-    id: 'passwordRecoveryNewPassword',
+    id: 'password-recovery-new-password',
     label: 'Login _ Recuperar Senha _ Criar nova senha',
     children: passwordRecoveryNewPasswordStates.map(
       ({ id, label, screenId }) => ({
@@ -122,12 +132,54 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
     ),
   },
   {
-    id: 'commercialDashboard',
+    id: 'commercial-dashboard',
     label: 'Comercial _ Dashboard',
     children: commercialDashboardStates.map(({ id, label, screenId }) => ({
       id,
       label,
       screenId,
     })),
+  },
+  {
+    id: 'complete-registration-document',
+    label: 'Cadastro Completo Etapa 2 _ Parte 1 Documento',
+    children: completeRegistrationDocumentStates.map(
+      ({ id, label, screenId }) => ({
+        id,
+        label,
+        screenId,
+      }),
+    ),
+  },
+  {
+    id: 'complete-registration-bank',
+    label: 'Cadastro Completo Etapa 2 _ Parte 2 Banco',
+    children: completeRegistrationBankStates.map(({ id, label, screenId }) => ({
+      id,
+      label,
+      screenId,
+    })),
+  },
+  {
+    id: 'complete-registration-biometry',
+    label: 'Cadastro Completo Etapa 2 _ Parte 3 Biometria',
+    children: completeRegistrationBiometryStates.map(
+      ({ id, label, screenId }) => ({
+        id,
+        label,
+        screenId,
+      }),
+    ),
+  },
+  {
+    id: 'complete-registration-feedback',
+    label: 'Cadastro Completo Etapa 2 _ Feedback',
+    children: completeRegistrationFeedbackStates.map(
+      ({ id, label, screenId }) => ({
+        id,
+        label,
+        screenId,
+      }),
+    ),
   },
 ]
