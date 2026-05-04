@@ -10,14 +10,20 @@ import type { AppUserProfile } from '../../data/appNavigation'
 interface AppTopbarProps {
   collapsed: boolean
   user: AppUserProfile
+  onLogoClick: () => void
   onToggleSidebar: () => void
+  onNewOperation: () => void
+  onToggleNotifications: () => void
   onToggleProfileMenu: () => void
 }
 
 export function AppTopbar({
   collapsed,
   user,
+  onLogoClick,
   onToggleSidebar,
+  onNewOperation,
+  onToggleNotifications,
   onToggleProfileMenu,
 }: AppTopbarProps) {
   return (
@@ -31,6 +37,7 @@ export function AppTopbar({
       }}
     >
       <Box
+        onClick={onLogoClick}
         sx={{
           width: collapsed ? 72 : 240,
           flexShrink: 0,
@@ -40,6 +47,7 @@ export function AppTopbar({
           px: collapsed ? 0 : 2.2,
           borderRight: '1px solid #E8ECF2',
           transition: 'width 220ms ease',
+          cursor: 'pointer',
         }}
       >
         <Box
@@ -83,6 +91,7 @@ export function AppTopbar({
           <Button
             color="inherit"
             startIcon={<AddRoundedIcon />}
+            onClick={onNewOperation}
             sx={{
               minHeight: 40,
               px: 1,
@@ -95,28 +104,39 @@ export function AppTopbar({
               },
             }}
           >
-            Nova Operação
+            Nova Operacao
           </Button>
         </Stack>
 
         <Stack direction="row" spacing={1.6} sx={{ alignItems: 'center' }}>
-          <Badge
-            badgeContent={user.notifications}
-            color="primary"
+          <Box
+            onClick={onToggleNotifications}
             sx={{
-              '& .MuiBadge-badge': {
-                minWidth: 18,
-                height: 18,
-                px: 0.5,
-                fontSize: '0.72rem',
-                fontWeight: 700,
-                top: 3,
-                right: -1,
-              },
+              width: 32,
+              height: 32,
+              display: 'grid',
+              placeItems: 'center',
+              cursor: 'pointer',
             }}
           >
-            <NotificationsNoneRoundedIcon sx={{ color: '#20212A' }} />
-          </Badge>
+            <Badge
+              badgeContent={user.notifications}
+              color="primary"
+              sx={{
+                '& .MuiBadge-badge': {
+                  minWidth: 18,
+                  height: 18,
+                  px: 0.5,
+                  fontSize: '0.72rem',
+                  fontWeight: 700,
+                  top: 3,
+                  right: -1,
+                },
+              }}
+            >
+              <NotificationsNoneRoundedIcon sx={{ color: '#20212A' }} />
+            </Badge>
+          </Box>
 
           <Stack
             direction="row"
@@ -139,16 +159,25 @@ export function AppTopbar({
 
             <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
               <Typography
-                sx={{ fontSize: '1rem', fontWeight: 700, color: '#20212A', lineHeight: 1.1 }}
+                sx={{
+                  fontSize: '1rem',
+                  fontWeight: 700,
+                  color: '#20212A',
+                  lineHeight: 1.1,
+                }}
               >
                 {user.name}
               </Typography>
-              <Typography sx={{ fontSize: '0.88rem', color: '#64748B', lineHeight: 1.2 }}>
+              <Typography
+                sx={{ fontSize: '0.88rem', color: '#64748B', lineHeight: 1.2 }}
+              >
                 {user.role}
               </Typography>
             </Box>
 
-            <KeyboardArrowDownRoundedIcon sx={{ color: '#41536A', fontSize: 22 }} />
+            <KeyboardArrowDownRoundedIcon
+              sx={{ color: '#41536A', fontSize: 22 }}
+            />
           </Stack>
         </Stack>
       </Stack>

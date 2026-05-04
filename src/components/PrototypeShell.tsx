@@ -19,9 +19,12 @@ import type {
   LoginPrototypeState,
   PasswordRecoveryMessagesState,
   PasswordRecoveryNewPasswordState,
+  PlaceholderRouteState,
   PasswordRecoveryRequestState,
   ProfileAccountState,
   ProfileAccountViewId,
+  ProfileBankDataState,
+  ProfilePlaceholderState,
   PrototypeGroupId,
   PrototypeScreenId,
   PrototypeViewId,
@@ -32,7 +35,10 @@ import type {
   RegistrationSuccessState,
 } from '../types/prototype'
 import { CommercialDashboard } from '../pages/commercial/CommercialDashboard'
+import { PlaceholderRoutePage } from '../pages/PlaceholderRoutePage'
 import { ProfileAccountPage } from '../pages/profile/ProfileAccountPage'
+import { ProfileBankDataPage } from '../pages/profile/ProfileBankDataPage'
+import { ProfilePlaceholderPage } from '../pages/profile/ProfilePlaceholderPage'
 import { LoginScreen } from './LoginScreen'
 import { PrototypeSidebar } from './PrototypeSidebar'
 import { PasswordRecoveryMessages } from './passwordRecovery/PasswordRecoveryMessages'
@@ -367,6 +373,7 @@ export function PrototypeShell() {
           <CommercialDashboard
             key={currentState.id}
             state={currentState as CommercialDashboardState}
+            onNavigate={(viewId) => navigateTo(viewId)}
             onOpenMyAccount={() => openProfile()}
             onBackToLogin={() => navigateTo('login.empty')}
           />
@@ -383,6 +390,7 @@ export function PrototypeShell() {
             onDocumentContinue={(state) =>
               handleCompleteRegistrationDocumentContinue(state)
             }
+            onNavigate={(viewId) => navigateTo(viewId)}
             onOpenMyAccount={() => openProfile()}
             onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
             onBackToLogin={() => navigateTo('login.empty')}
@@ -399,6 +407,7 @@ export function PrototypeShell() {
             }}
             onBankContinue={(state) => handleCompleteRegistrationBankContinue(state)}
             onBankBack={() => navigateTo('completeRegistrationDocument.valid')}
+            onNavigate={(viewId) => navigateTo(viewId)}
             onOpenMyAccount={() => openProfile()}
             onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
             onBackToLogin={() => navigateTo('login.empty')}
@@ -421,6 +430,7 @@ export function PrototypeShell() {
             onBiometrySimulateSuccess={() =>
               navigateTo('completeRegistrationBiometry.success')
             }
+            onNavigate={(viewId) => navigateTo(viewId)}
             onOpenMyAccount={() => openProfile()}
             onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
             onBackToLogin={() => navigateTo('login.empty')}
@@ -435,6 +445,7 @@ export function PrototypeShell() {
               kind: 'feedback',
               state: currentState as CompleteRegistrationFeedbackState,
             }}
+            onNavigate={(viewId) => navigateTo(viewId)}
             onOpenMyAccount={() => openProfile()}
             onReturnToDashboard={() => navigateTo('commercialDashboard.expanded')}
             onBackToLogin={() => navigateTo('login.empty')}
@@ -447,6 +458,34 @@ export function PrototypeShell() {
             state={currentState as ProfileAccountState}
             onNavigate={(viewId) => navigateTo(viewId)}
             onGoToDashboard={() => navigateTo('commercialDashboard.expanded')}
+            onBackToLogin={() => navigateTo('login.empty')}
+          />
+        )
+      case 'profileBankData':
+        return (
+          <ProfileBankDataPage
+            key={currentState.id}
+            state={currentState as ProfileBankDataState}
+            onNavigate={(viewId) => navigateTo(viewId)}
+            onGoToDashboard={() => navigateTo('commercialDashboard.expanded')}
+            onBackToLogin={() => navigateTo('login.empty')}
+          />
+        )
+      case 'placeholderRoute':
+        return (
+          <PlaceholderRoutePage
+            key={currentState.id}
+            state={currentState as PlaceholderRouteState}
+            onNavigate={(viewId) => navigateTo(viewId)}
+            onBackToLogin={() => navigateTo('login.empty')}
+          />
+        )
+      case 'profilePlaceholder':
+        return (
+          <ProfilePlaceholderPage
+            key={currentState.id}
+            state={currentState as ProfilePlaceholderState}
+            onNavigate={(viewId) => navigateTo(viewId)}
             onBackToLogin={() => navigateTo('login.empty')}
           />
         )

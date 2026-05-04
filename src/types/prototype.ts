@@ -14,10 +14,29 @@ export type PrototypeScreenId =
   | 'completeRegistrationBiometry'
   | 'completeRegistrationFeedback'
   | 'profileAccount'
+  | 'profileBankData'
+  | 'placeholderRoute'
+  | 'profilePlaceholder'
 
 export type PrototypeGroupId = string
 
 export type RecoveryChannel = 'whatsapp' | 'email' | 'sms'
+export type AppNavigationItemId =
+  | 'dashboard'
+  | 'crm'
+  | 'operations'
+  | 'team'
+  | 'supportMaterial'
+  | 'transactions'
+  | 'wallet'
+  | 'reports'
+  | 'campaigns'
+export type ProfileNavigationItemId =
+  | 'account'
+  | 'bank'
+  | 'settings'
+  | 'security'
+  | 'history'
 
 export type LoginPrototypeStateKey =
   | 'empty'
@@ -80,6 +99,28 @@ export type ProfileAccountStateKey =
   | 'invalid'
   | 'saveError'
   | 'unsavedConfirm'
+export type ProfileBankDataStateKey =
+  | 'new'
+  | 'pending'
+  | 'empty'
+  | 'invalid'
+  | 'valid'
+  | 'saved'
+  | 'invalidSave'
+  | 'saveError'
+  | 'unsaved'
+  | 'unsavedConfirm'
+export type PlaceholderRouteStateKey =
+  | 'crm'
+  | 'operations'
+  | 'team'
+  | 'supportMaterial'
+  | 'transactions'
+  | 'wallet'
+  | 'reports'
+  | 'campaigns'
+  | 'newOperation'
+export type ProfilePlaceholderStateKey = 'settings' | 'security' | 'history'
 
 export type LoginPrototypeViewId = `login.${LoginPrototypeStateKey}`
 export type RegistrationStepOneViewId =
@@ -108,6 +149,11 @@ export type CompleteRegistrationBiometryViewId =
 export type CompleteRegistrationFeedbackViewId =
   `completeRegistrationFeedback.${CompleteRegistrationFeedbackStateKey}`
 export type ProfileAccountViewId = `profileAccount.${ProfileAccountStateKey}`
+export type ProfileBankDataViewId = `profileBankData.${ProfileBankDataStateKey}`
+export type PlaceholderRouteViewId =
+  `placeholderRoute.${PlaceholderRouteStateKey}`
+export type ProfilePlaceholderViewId =
+  `profilePlaceholder.${ProfilePlaceholderStateKey}`
 
 export type PrototypeViewId =
   | LoginPrototypeViewId
@@ -125,6 +171,9 @@ export type PrototypeViewId =
   | CompleteRegistrationBiometryViewId
   | CompleteRegistrationFeedbackViewId
   | ProfileAccountViewId
+  | ProfileBankDataViewId
+  | PlaceholderRouteViewId
+  | ProfilePlaceholderViewId
 
 export type PasswordChecklistStatus = 'neutral' | 'success' | 'error'
 
@@ -285,9 +334,15 @@ export type ProfileBiometryStatus =
   | 'pending'
   | 'rejected'
   | 'retry'
+export type ProfileInlineNoticeType = 'info' | 'warning'
 
 export interface ProfileToastState {
   type: ProfileToastType
+  message: string
+}
+
+export interface ProfileInlineNoticeState {
+  type: ProfileInlineNoticeType
   message: string
 }
 
@@ -325,6 +380,43 @@ export interface ProfileAccountState extends PrototypeBaseState {
   expiryDate: PrototypeFieldState
 }
 
+export interface ProfileBankDataState extends PrototypeBaseState {
+  id: ProfileBankDataViewId
+  screenId: 'profileBankData'
+  stateKey: ProfileBankDataStateKey
+  collapsed: boolean
+  showProfileMenu: boolean
+  showUnsavedChangesModal: boolean
+  hasUnsavedChanges: boolean
+  toast?: ProfileToastState
+  notice?: ProfileInlineNoticeState
+  bank: PrototypeFieldState
+  accountType: PrototypeFieldState
+  branch: PrototypeFieldState
+  account: PrototypeFieldState
+}
+
+export interface PlaceholderRouteState extends PrototypeBaseState {
+  id: PlaceholderRouteViewId
+  screenId: 'placeholderRoute'
+  stateKey: PlaceholderRouteStateKey
+  mainItemId: AppNavigationItemId
+  title: string
+  description: string
+  actionLabel?: string
+}
+
+export interface ProfilePlaceholderState extends PrototypeBaseState {
+  id: ProfilePlaceholderViewId
+  screenId: 'profilePlaceholder'
+  stateKey: ProfilePlaceholderStateKey
+  collapsed: boolean
+  showProfileMenu: boolean
+  profileItemId: ProfileNavigationItemId
+  title: string
+  description: string
+}
+
 export type PrototypeScreenState =
   | LoginPrototypeState
   | RegistrationStepOneState
@@ -341,6 +433,9 @@ export type PrototypeScreenState =
   | CompleteRegistrationBiometryState
   | CompleteRegistrationFeedbackState
   | ProfileAccountState
+  | ProfileBankDataState
+  | PlaceholderRouteState
+  | ProfilePlaceholderState
 
 export interface PrototypeNavigationChild {
   id: PrototypeViewId

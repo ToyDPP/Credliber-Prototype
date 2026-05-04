@@ -1,14 +1,26 @@
-import { Box, Button, Grid, Stack } from '@mui/material'
-import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
+import { useState } from 'react'
+import { Box, Grid, Stack } from '@mui/material'
 import { appUserProfile } from '../../data/appNavigation'
+import {
+  getAppNavigationTarget,
+  getProfileNavigationTarget,
+} from '../../data/navigationRegistry'
 import { mockProfilePhoto } from '../../data/profileStates'
-import type { ProfileAccountViewId, ProfileAccountState } from '../../types/prototype'
+import type {
+  AppNavigationItemId,
+  ProfileAccountState,
+  PrototypeViewId,
+} from '../../types/prototype'
 import { LoggedAppShell } from '../../components/appShell/LoggedAppShell'
 import { BiometryStatusCard } from '../../components/profile/BiometryStatusCard'
 import { ChangePhotoModal } from '../../components/profile/ChangePhotoModal'
 import { ProfileHeaderCard } from '../../components/profile/ProfileHeaderCard'
+import { ProfileSaveButton } from '../../components/profile/ProfileSaveButton'
 import { ProfileSectionCard } from '../../components/profile/ProfileSectionCard'
-import { ProfileSidebar } from '../../components/profile/ProfileSidebar'
+import {
+  ProfileSidebar,
+  type ProfileSidebarItemId,
+} from '../../components/profile/ProfileSidebar'
 import { ProfileTextField } from '../../components/profile/ProfileTextField'
 import { ProfileToast } from '../../components/profile/ProfileToast'
 import { RemovePhotoModal } from '../../components/profile/RemovePhotoModal'
@@ -18,8 +30,10 @@ interface ProfileAccountPageProps {
   state: ProfileAccountState
   onBackToLogin: () => void
   onGoToDashboard: () => void
-  onNavigate: (viewId: ProfileAccountViewId) => void
+  onNavigate: (viewId: PrototypeViewId) => void
 }
+
+type PendingDestination = PrototypeViewId | 'dashboard'
 
 export function ProfileAccountPage({
   state,
@@ -27,6 +41,31 @@ export function ProfileAccountPage({
   onGoToDashboard,
   onNavigate,
 }: ProfileAccountPageProps) {
+  const [collapsed, setCollapsed] = useState(state.collapsed)
+  const [showProfileMenu, setShowProfileMenu] = useState(state.showProfileMenu)
+  const [pendingDestination, setPendingDestination] =
+    useState<PendingDestination | null>(null)
+
+  const requestNavigation = (destination: PendingDestination) => {
+    if (state.hasUnsavedChanges && !state.showUnsavedChangesModal) {
+      setPendingDestination(destination)
+      onNavigate('profileAccount.unsavedConfirm')
+      return
+    }
+
+    if (destination === 'dashboard') {
+      onGoToDashboard()
+      return
+    }
+
+    if (destination === 'login.empty') {
+      onBackToLogin()
+      return
+    }
+
+    onNavigate(destination)
+  }
+
   const handleSaveChanges = () => {
     if (state.stateKey === 'invalid') {
       onNavigate('profileAccount.invalid')
@@ -41,45 +80,55 @@ export function ProfileAccountPage({
     onNavigate('profileAccount.saved')
   }
 
-  const handleAttemptNavigate = () => {
-    if (state.hasUnsavedChanges) {
-      onNavigate('profileAccount.unsavedConfirm')
+  const handleSidebarSelect = (itemId: ProfileSidebarItemId) => {
+    requestNavigation(getProfileNavigationTarget(itemId))
+  }
+
+  const handleMainNavigationSelect = (itemId: AppNavigationItemId) => {
+    requestNavigation(getAppNavigationTarget(itemId))
+  }
+
+  const handleCloseUnsavedModal = () => {
+    setPendingDestination(null)
+    onNavigate('profileAccount.fieldsOpen')
+  }
+
+  const handleConfirmUnsavedExit = () => {
+    const destination = pendingDestination
+    setPendingDestination(null)
+
+    if (!destination || destination === 'dashboard') {
+      onGoToDashboard()
       return
     }
 
-    onGoToDashboard()
+    if (destination === 'login.empty') {
+      onBackToLogin()
+      return
+    }
+
+    onNavigate(destination)
   }
 
   return (
     <LoggedAppShell
-      collapsed={state.collapsed}
+      collapsed={collapsed}
+      activeMainItemId="dashboard"
       showFirstAccessModal={false}
-      showProfileMenu={state.showProfileMenu}
-      onToggleSidebar={() =>
-        onNavigate(
-          state.collapsed
-            ? 'profileAccount.biometryApproved'
-            : 'profileAccount.sidebarCollapsed',
-        )
-      }
-      onToggleProfileMenu={() =>
-        onNavigate(
-          state.showProfileMenu
-            ? 'profileAccount.biometryApproved'
-            : 'profileAccount.menuExpanded',
-        )
-      }
-      onCloseProfileMenu={() => onNavigate('profileAccount.biometryApproved')}
+      showProfileMenu={showProfileMenu}
+      onLogoClick={() => requestNavigation('dashboard')}
+      onToggleSidebar={() => setCollapsed((current) => !current)}
+      onToggleProfileMenu={() => setShowProfileMenu((current) => !current)}
+      onCloseProfileMenu={() => setShowProfileMenu(false)}
+      onMainNavigationSelect={handleMainNavigationSelect}
+      onOpenNewOperation={() => requestNavigation('placeholderRoute.newOperation')}
       onCloseFirstAccessModal={() => undefined}
       onConcludeRegistration={() => undefined}
-      onBackToLogin={onBackToLogin}
-      onOpenMyAccount={() => onNavigate('profileAccount.biometryApproved')}
+      onBackToLogin={() => requestNavigation('login.empty')}
+      onOpenMyAccount={() => requestNavigation('profileAccount.biometryApproved')}
     >
       <Box sx={{ display: 'flex', minHeight: '100%' }}>
-        <ProfileSidebar
-          hasUnsavedChanges={state.hasUnsavedChanges}
-          onAttemptNavigate={handleAttemptNavigate}
-        />
+        <ProfileSidebar activeItem="account" onSelectItem={handleSidebarSelect} />
 
         <Box
           sx={{
@@ -204,30 +253,7 @@ export function ProfileAccountPage({
             </ProfileSectionCard>
           </Stack>
 
-          <Box
-            sx={{
-              position: 'sticky',
-              bottom: 16,
-              mt: 4,
-              display: 'flex',
-              justifyContent: 'flex-end',
-              zIndex: 4,
-            }}
-          >
-            <Button
-              variant="contained"
-              startIcon={<CheckRoundedIcon />}
-              onClick={handleSaveChanges}
-              sx={{
-                minHeight: 48,
-                borderRadius: '8px',
-                px: 2.5,
-                boxShadow: '0 14px 30px rgba(242, 10, 91, 0.22)',
-              }}
-            >
-              Salvar alteracoes
-            </Button>
-          </Box>
+          <ProfileSaveButton onClick={handleSaveChanges} />
         </Box>
       </Box>
 
@@ -246,8 +272,8 @@ export function ProfileAccountPage({
 
       <UnsavedChangesModal
         open={state.showUnsavedChangesModal}
-        onClose={() => onNavigate('profileAccount.fieldsOpen')}
-        onConfirmExit={onGoToDashboard}
+        onClose={handleCloseUnsavedModal}
+        onConfirmExit={handleConfirmUnsavedExit}
       />
     </LoggedAppShell>
   )

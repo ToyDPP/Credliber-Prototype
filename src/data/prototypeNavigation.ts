@@ -5,6 +5,8 @@ import {
   completeRegistrationFeedbackStates,
 } from './completeRegistrationStates'
 import { commercialDashboardStates } from './commercialDashboardStates'
+import { profileBankStates } from './profileBankStates'
+import { placeholderRouteStates, profilePlaceholderStates } from './placeholderStates'
 import { loginStates } from './loginStates'
 import { profileAccountStates } from './profileStates'
 import {
@@ -41,6 +43,9 @@ export const prototypeStates: PrototypeScreenState[] = [
   ...completeRegistrationBiometryStates,
   ...completeRegistrationFeedbackStates,
   ...profileAccountStates,
+  ...profileBankStates,
+  ...placeholderRouteStates,
+  ...profilePlaceholderStates,
 ]
 
 export const prototypeStateMap = Object.fromEntries(
@@ -227,6 +232,29 @@ export const prototypeNavigation: PrototypeNavigationGroup[] = [
     children: profileAccountStates
       .filter(({ stateKey }) =>
         ['saved', 'invalid', 'saveError', 'unsavedConfirm'].includes(stateKey),
+      )
+      .map(({ id, label, screenId }) => ({
+        id,
+        label,
+        screenId,
+      })),
+  },
+  {
+    id: 'profile-bank',
+    label: 'Perfil _ Dados Bancarios',
+    children: profileBankStates
+      .filter(({ stateKey }) =>
+        [
+          'new',
+          'pending',
+          'empty',
+          'invalid',
+          'valid',
+          'saved',
+          'invalidSave',
+          'unsaved',
+          'unsavedConfirm',
+        ].includes(stateKey),
       )
       .map(({ id, label, screenId }) => ({
         id,

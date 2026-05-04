@@ -10,16 +10,18 @@ import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceW
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded'
 import StarsRoundedIcon from '@mui/icons-material/StarsRounded'
 import type {
-  AppNavigationItem,
-  AppNavigationSection,
-} from '../../data/appNavigation'
+  NavigationSidebarItem,
+  NavigationSidebarSection,
+} from '../../data/navigationRegistry'
+import type { AppNavigationItemId } from '../../types/prototype'
 
 interface SidebarSectionProps {
-  section: AppNavigationSection
+  section: NavigationSidebarSection
   collapsed: boolean
+  onSelectItem: (itemId: AppNavigationItemId) => void
 }
 
-function getSidebarIcon(icon: AppNavigationItem['icon']) {
+function getSidebarIcon(icon: NavigationSidebarItem['icon']) {
   switch (icon) {
     case 'dashboard':
       return <GridViewRoundedIcon fontSize="small" />
@@ -46,6 +48,7 @@ function getSidebarIcon(icon: AppNavigationItem['icon']) {
 export function SidebarSection({
   section,
   collapsed,
+  onSelectItem,
 }: SidebarSectionProps) {
   if (collapsed) {
     return (
@@ -53,10 +56,12 @@ export function SidebarSection({
         {section.items.map((item) => (
           <Box
             key={item.id}
+            onClick={() => onSelectItem(item.id as AppNavigationItemId)}
             sx={{
               position: 'relative',
               display: 'flex',
               justifyContent: 'center',
+              cursor: 'pointer',
             }}
           >
             <Box
@@ -120,6 +125,7 @@ export function SidebarSection({
         {section.items.map((item) => (
           <Box
             key={item.id}
+            onClick={() => onSelectItem(item.id as AppNavigationItemId)}
             sx={{
               position: 'relative',
               display: 'flex',
@@ -127,6 +133,7 @@ export function SidebarSection({
               gap: 1.5,
               minHeight: 54,
               px: 2,
+              cursor: 'pointer',
               color: item.active ? '#1F2937' : '#2A3547',
               bgcolor: item.active ? 'rgba(242, 10, 91, 0.08)' : 'transparent',
               '&::before': item.active

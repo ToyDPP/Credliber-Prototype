@@ -1,12 +1,21 @@
 import { Box, Stack } from '@mui/material'
-import { appNavigationSections } from '../../data/appNavigation'
+import { getAppNavigationSections } from '../../data/navigationRegistry'
+import type { AppNavigationItemId } from '../../types/prototype'
 import { SidebarSection } from './SidebarSection'
 
 interface MainSidebarProps {
   collapsed: boolean
+  activeItemId: AppNavigationItemId
+  onSelectItem: (itemId: AppNavigationItemId) => void
 }
 
-export function MainSidebar({ collapsed }: MainSidebarProps) {
+export function MainSidebar({
+  collapsed,
+  activeItemId,
+  onSelectItem,
+}: MainSidebarProps) {
+  const sections = getAppNavigationSections(activeItemId)
+
   return (
     <Box
       component="aside"
@@ -20,11 +29,12 @@ export function MainSidebar({ collapsed }: MainSidebarProps) {
       }}
     >
       <Stack sx={{ height: '100%' }}>
-        {appNavigationSections.map((section) => (
+        {sections.map((section) => (
           <SidebarSection
             key={section.id}
             section={section}
             collapsed={collapsed}
+            onSelectItem={onSelectItem}
           />
         ))}
       </Stack>

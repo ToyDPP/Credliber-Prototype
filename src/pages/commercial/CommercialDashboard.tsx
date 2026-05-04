@@ -8,6 +8,7 @@ import { CompleteRegistrationFeedback } from '../../components/completeRegistrat
 import { CompleteRegistrationModal } from '../../components/completeRegistration/CompleteRegistrationModal'
 import { DocumentIdentificationStep } from '../../components/completeRegistration/DocumentIdentificationStep'
 import { FacialBiometryStep } from '../../components/completeRegistration/FacialBiometryStep'
+import { getAppNavigationTarget } from '../../data/navigationRegistry'
 import {
   completeRegistrationBankStates,
   completeRegistrationBiometryStates,
@@ -15,11 +16,13 @@ import {
   completeRegistrationFeedbackStates,
 } from '../../data/completeRegistrationStates'
 import type {
+  AppNavigationItemId,
   CommercialDashboardState,
   CompleteRegistrationBankState,
   CompleteRegistrationBiometryState,
   CompleteRegistrationDocumentState,
   CompleteRegistrationFeedbackState,
+  PrototypeViewId,
 } from '../../types/prototype'
 
 type CompleteRegistrationFlowState =
@@ -44,6 +47,7 @@ interface CommercialDashboardProps {
   state: CommercialDashboardState
   onBackToLogin: () => void
   onOpenMyAccount?: () => void
+  onNavigate?: (viewId: PrototypeViewId) => void
   initialCompleteRegistrationState?: CompleteRegistrationFlowState | null
   onReturnToDashboard?: () => void
   onDocumentContinue?: (state: CompleteRegistrationDocumentState) => void
@@ -81,6 +85,7 @@ export function CommercialDashboard({
   state,
   onBackToLogin,
   onOpenMyAccount,
+  onNavigate,
   initialCompleteRegistrationState = null,
   onReturnToDashboard,
   onDocumentContinue,
@@ -111,22 +116,15 @@ export function CommercialDashboard({
 
   const openDocumentFlow = () => {
     setShowFirstAccessModal(false)
-
-    if (onDocumentContinue || initialCompleteRegistrationState) {
-      setCompleteRegistrationState({
-        kind: 'document',
-        state: documentEmptyState!,
-      })
-      return
-    }
-
     setCompleteRegistrationState({
       kind: 'document',
       state: documentEmptyState!,
     })
   }
 
-  const handleDocumentContinue = (documentState: CompleteRegistrationDocumentState) => {
+  const handleDocumentContinue = (
+    documentState: CompleteRegistrationDocumentState,
+  ) => {
     if (onDocumentContinue) {
       onDocumentContinue(documentState)
       return
@@ -206,7 +204,10 @@ export function CommercialDashboard({
       return
     }
 
-    if (biometryState.stateKey === 'analyzing' || biometryState.stateKey === 'success') {
+    if (
+      biometryState.stateKey === 'analyzing' ||
+      biometryState.stateKey === 'success'
+    ) {
       setCompleteRegistrationState({
         kind: 'feedback',
         state: feedbackConfirmedState!,
@@ -256,6 +257,10 @@ export function CommercialDashboard({
     })
   }
 
+  const handleMainNavigationSelect = (itemId: AppNavigationItemId) => {
+    onNavigate?.(getAppNavigationTarget(itemId))
+  }
+
   const renderCompleteRegistrationModal = () => {
     if (!completeRegistrationState) {
       return null
@@ -266,7 +271,9 @@ export function CommercialDashboard({
         <CompleteRegistrationModal open onClose={closeCompleteRegistration}>
           <DocumentIdentificationStep
             state={completeRegistrationState.state}
-            onContinue={() => handleDocumentContinue(completeRegistrationState.state)}
+            onContinue={() =>
+              handleDocumentContinue(completeRegistrationState.state)
+            }
           />
         </CompleteRegistrationModal>
       )
@@ -321,11 +328,15 @@ export function CommercialDashboard({
     <>
       <LoggedAppShell
         collapsed={collapsed}
+        activeMainItemId="dashboard"
         showFirstAccessModal={showFirstAccessModal}
         showProfileMenu={showProfileMenu}
+        onLogoClick={() => onNavigate?.('commercialDashboard.expanded')}
         onToggleSidebar={() => setCollapsed((current) => !current)}
         onToggleProfileMenu={() => setShowProfileMenu((current) => !current)}
         onCloseProfileMenu={() => setShowProfileMenu(false)}
+        onMainNavigationSelect={handleMainNavigationSelect}
+        onOpenNewOperation={() => onNavigate?.('placeholderRoute.newOperation')}
         onCloseFirstAccessModal={() => setShowFirstAccessModal(false)}
         onConcludeRegistration={openDocumentFlow}
         onOpenMyAccount={onOpenMyAccount}
